@@ -1,0 +1,6 @@
+project Test is
+	for Main use ("langford.adb");
+	package Compiler is
+			for Switches ("Ada") use ("-gnat2022", "-gnata", "-g");
+	end Compiler;
+end Test;
