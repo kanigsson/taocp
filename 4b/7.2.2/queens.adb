@@ -2,16 +2,20 @@ with Ada.Text_IO;
 procedure Queens is
 	procedure Run (N : Integer) is
 		A : array (1 .. N) of Boolean;
-		X : array (1 .. N) of Integer;
+		type Ar is array (1 .. N) of Integer;
+		X : Ar;
 		B, C : array (1 .. 2 * N - 1) of Boolean;
 		L, T : Integer;
 
 		Count : Integer := 0;
+		Prev : Ar;
 		procedure Visit is
 		begin
-			if X (1) = 2 and then X (2) = N and then X (N - 1) = 1 and then X (N) = N - 1 then
-				Count := Count + 1;
+			if X (1 .. 6) = Prev (1 .. 6) then
+				Ada.Text_IO.Put_Line (X'Image);
+				Ada.Text_IO.Put_Line (Prev'Image);
 			end if;
+			Prev := X;
 		end Visit;
 	begin
 		<<B1>>
@@ -47,7 +51,5 @@ procedure Queens is
 	  Ada.Text_IO.Put_Line (Integer'image (Count));
 	end Run;
 begin
-	for I in 5 .. 17 loop
-		Run (I);
-	end loop;
+	Run (8);
 end Queens;
