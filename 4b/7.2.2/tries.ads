@@ -5,15 +5,17 @@ package Tries is
 	subtype Letter is Character range 'a' .. 'z';
 	type Node is array (Letter) of Node_Id;
 
-	type T is array (Node_Id) of Node;
+	type Data_Type is array (Node_Id) of Node;
 
-	Data : T := (others => (others => 0));
-	Max : Valid_Node_Id := 1;
+	type Trie is record
+		Data : Data_Type := (others => (others => 0));
+		Max : Valid_Node_Id := 1;
+	end record;
 
-	procedure Insert (S : String);
+	procedure Insert (T : in out Trie; S : String);
 
-	function Mem (S : String) return Boolean;
+	function Mem (T : Trie; S : String) return Boolean;
 
-	function Num_Elts return Natural;
+	function Num_Elts (T : Trie) return Natural;
 
 end Tries;

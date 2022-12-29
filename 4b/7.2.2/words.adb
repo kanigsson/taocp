@@ -1,31 +1,27 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Tries;
+with Wordsearch;
 
 procedure Words is
-	S : String (1 .. 200);
-	F : File_Type;
-	Last : Integer;
-	Count : Integer := 0;
 
-	procedure Read_Trie is
+	procedure Read_Trie_From_File (T : in out Tries.Trie; Fn : String; Len : Integer) is
+		S : String (1 .. 200);
+		F : File_Type;
+		Last : Integer;
 	begin
-		Open (F, In_File, "english-words/words.txt");
+		Open (F, In_File, Fn);
 		loop
 			Get_Line (F, S, Last);
-			if Last = 6 then
-				Count := Count + 1;
-				Tries.Insert (S (S'First .. Last));
+			if Last = Len then
+				Tries.Insert (T, S (S'First .. Last));
 			end if;
 			exit when End_Of_File (F);
 		end loop;
-		Put_Line (Count'Image);
-		Put_Line (Tries.Num_Elts'Image);
-	Put_Line (Tries.Max'Image);
-	end Read_Trie;
+		Close (F);
+	end Read_Trie_From_File;
 
-	procedure Read_Words is
-	begin
-	end Read_Words;
 begin
-	Read_Trie;
+	Read_Trie_From_File (Wordsearch.Six, "english-words/words6.txt", 6);
+	Read_Trie_From_File (Wordsearch.Five, "words.txt", 5);
+	Wordsearch.Search (1, 1, 1);
 end Words;

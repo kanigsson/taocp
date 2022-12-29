@@ -2,7 +2,7 @@ with Ada.Characters.Handling;
 
 package body Tries is
 
-	function Mem (S : String) return Boolean is
+	function Mem (T : Trie; S : String) return Boolean is
 		function Aux (I : Integer; N : Node) return Boolean is
 			C : Character renames Ada.Characters.Handling.To_Lower (S (I));
 		begin
@@ -13,7 +13,7 @@ package body Tries is
 				if I = S'Last then
 					return True;
 				else
-					return Aux (I + 1, Data (N (C)));
+					return Aux (I + 1, T.Data (N (C)));
 				end if;
 			else
 				return False;
@@ -23,20 +23,20 @@ package body Tries is
 		if S'Length = 0 then 
 			return True;
 		end if;
-		return Aux (S'First, Data (1));
+		return Aux (S'First, T.Data (1));
 	end Mem;
 
-	procedure Insert (S : String) is
+	procedure Insert (T : in out Trie; S : String) is
 		procedure Aux (I : Integer; N : Node_Id) is
-			No : Node renames Data (N);
+			No : Node renames T.Data (N);
 			C : Character renames Ada.Characters.Handling.To_Lower (S (I));
 		begin
 			if C not in Letter then
 				return;
 			end if;
 			if No (C) = 0 then
-				Max := Max + 1;
-				No (C) := Max;
+				T.Max := T.Max + 1;
+				No (C) := T.Max;
 			end if;
 			if I < S'Last then
 				Aux (I + 1, No (C));
@@ -49,11 +49,11 @@ package body Tries is
 		Aux (S'First, 1);
 	end Insert;
 
-	function Num_Elts return Natural is
+	function Num_Elts (T : Trie) return Natural is
 		Result : Natural := 0;
 
 		procedure Aux (N : Node_Id; I : Integer) is
-			No : Node renames Data (N);
+			No : Node renames T.Data (N);
 		begin
 			for C in No'Range loop
 				if (No (C)) /= 0 then
