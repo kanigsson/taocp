@@ -1,9 +1,13 @@
 with Ada.Text_IO;
 package body X is
 
+   Debug_Out : Boolean := False;
+
    procedure Debug (S : String) is
    begin
-      Ada.Text_IO.Put_Line (S);
+      if Debug_Out then
+         Ada.Text_IO.Put_Line (S);
+      end if;
    end Debug;
 
 	procedure Run (IT : in out Item_Table; DT : in out Data_Table) is
@@ -21,14 +25,14 @@ package body X is
          Q: Integer;
       begin
          Q := X;
-         Ada.Text_IO.Put (To_String (IT (TOP (Q)).Name));
-         Q := Q + 1;
-         if TOP (Q) <= 0 then
-            while Q /= X loop
+         loop
+            Ada.Text_IO.Put (To_String (IT (TOP (Q)).Name));
+            Q := Q + 1;
+            if TOP (Q) <= 0 then
                Q := ULINK (Q);
-               Ada.Text_IO.Put (To_String (IT (TOP (Q)).Name));
-            end loop;
-         end if;
+            end if;
+            exit when X = Q;
+         end loop;
          Ada.Text_IO.New_Line;
       end Print_Node;
 
@@ -36,7 +40,6 @@ package body X is
       begin
          Ada.Text_IO.Put ("SOLUTION  ");
          for X in R'Range loop
-            ADa.Text_IO.Put (R (X)'Img);
             Print_Node (R (X));
          end loop;
       end Visit;
